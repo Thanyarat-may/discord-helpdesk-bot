@@ -24,7 +24,8 @@ if (match) {
 
   const res = await axios.post(process.env.GAS_WEBHOOK, {
     source: "discord",
-    message: text
+    message: text,
+    admin: message.author.username
   });
 
   const result = res.data.result;
@@ -44,7 +45,12 @@ if (match) {
   else if (result === "NOT_FOUND") {
     await message.reply(`❌ ไม่พบ Ticket นี้`);
   }
+
+  else {
+    await message.reply(`⚠️ ไม่สามารถอัปเดตสถานะได้`);
+  }
 }
+
 
 });
 
