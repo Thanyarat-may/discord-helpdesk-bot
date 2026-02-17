@@ -18,21 +18,27 @@ client.on('messageCreate', async (message) => {
 
   const text = message.content.trim();
 
-  if (/^(รับ|ปิด)\s+IT\d{2}-\d{3}$/i.test(text)) {
+const match = text.match(/(รับ|ปิด)\s+(IT\d{2}-\d{3})/i);
 
-    try {
-      await axios.post(process.env.GAS_WEBHOOK, {
-        source: "discord",
-        message: text,
-        admin: message.author.username
-      });
+if (match) {
+  const action = match[1];
+  const ticketId = match[2];
 
-      await message.reply("อัปเดตสถานะเรียบร้อย ✅");
+  await axios.post(process.env.GAS_WEBHOOK, {
+    source: "discord",
+    message: text,
+    admin: message.author.username
+  });
 
-    } catch (err) {
-      await message.reply("เกิดข้อผิดพลาด ❌");
-    }
+  if (action === "รับ") {
+    await message.reply(`✅ ${ticketId}\nStatus: IN_PROGRESS`);
   }
+
+  if (action === "ปิด") {
+    await message.reply(`✅ ${ticketId}\nStatus: DONE`);
+  }
+}
+
 });
 
 client.login(process.env.BOT_TOKEN);
