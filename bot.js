@@ -18,7 +18,18 @@ client.on('messageCreate', async (message) => {
 
   const text = message.content.trim();
 
-const match = text.match(/(รับ|ปิด)\s+(IT\d{2}-\d{3})/i);
+const match = text.match(/^IT\d{2}-\d{3}$/i);
+
+if (match) {
+
+  await axios.post(process.env.GAS_WEBHOOK, {
+    source: "discord",
+    message: text
+  });
+
+  await message.reply(`✅ ${text} อัปเดตสถานะแล้ว`);
+}
+
 
 if (match) {
   const action = match[1];
