@@ -1,6 +1,18 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
+const express = require('express');
 
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('IT Helpdesk Bot is running');
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Web server ready');
+});
+
+// ===== Discord Bot =====
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -8,6 +20,7 @@ const client = new Client({
     GatewayIntentBits.MessageContent
   ]
 });
+
 
 client.on('ready', () => {
   console.log(`Bot logged in as ${client.user.tag}`);
