@@ -22,31 +22,27 @@ const match = text.match(/^IT\d{2}-\d{3}$/i);
 
 if (match) {
 
-  await axios.post(process.env.GAS_WEBHOOK, {
+  const res = await axios.post(process.env.GAS_WEBHOOK, {
     source: "discord",
     message: text
   });
 
-  await message.reply(`✅ ${text} อัปเดตสถานะแล้ว`);
-}
+  const result = res.data.result;
 
-
-if (match) {
-  const action = match[1];
-  const ticketId = match[2];
-
-  await axios.post(process.env.GAS_WEBHOOK, {
-    source: "discord",
-    message: text,
-    admin: message.author.username
-  });
-
-  if (action === "รับ") {
-    await message.reply(`✅ ${ticketId}\nStatus: IN_PROGRESS`);
+  if (result === "ACCEPTED") {
+    await message.reply(`✅ ${text}\nสถานะ: กำลังดำเนินการ`);
   }
 
-  if (action === "ปิด") {
-    await message.reply(`✅ ${ticketId}\nStatus: DONE`);
+  else if (result === "CLOSED") {
+    await message.reply(`✅ ${text}\nสถานะ: เสร็จสิ้น`);
+  }
+
+  else if (result === "ALREADY_DONE") {
+    await message.reply(`⚠️ ${text}\nเคสนี้ปิดเรียบร้อยแล้ว`);
+  }
+
+  else if (result === "NOT_FOUND") {
+    await message.reply(`❌ ไม่พบ Ticket นี้`);
   }
 }
 
