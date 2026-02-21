@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('IT Helpdesk Bot is running');
+  res.status(200).send('IT Helpdesk Bot is running');
 });
 
 app.listen(process.env.PORT || 3000, () => {
