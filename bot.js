@@ -62,6 +62,7 @@ client.on('messageCreate', async (message) => {
   }
 });
 
+console.log("TOKEN LENGTH:", process.env.BOT_TOKEN?.length);
 client.login(process.env.BOT_TOKEN)
   .then(() => console.log("LOGIN SUCCESS"))
   .catch(err => console.error("LOGIN ERROR:", err));
