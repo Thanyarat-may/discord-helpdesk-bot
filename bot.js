@@ -83,4 +83,5 @@ console.log("FINAL RESULT:", result);
 
 });
 
+console.log("BOT_TOKEN =", process.env.BOT_TOKEN);
 client.login(process.env.BOT_TOKEN);
