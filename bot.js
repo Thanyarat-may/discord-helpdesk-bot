@@ -10,10 +10,6 @@ app.get('/', (req, res) => {
 
 let isReady = false;
 
-client.on("clientReady", () => {
-  isReady = true;
-});
-
 app.get("/health", (req, res) => {
   if (isReady) {
     res.status(200).send("OK");
@@ -26,6 +22,7 @@ app.listen(process.env.PORT || 3000, () => {
   console.log('Web server ready');
 });
 
+/* 🔥 ต้องสร้าง client ก่อน */
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -34,8 +31,9 @@ const client = new Client({
   ]
 });
 
-
+/* 🔥 แล้วค่อยใช้ client */
 client.on("clientReady", () => {
+  isReady = true;
   console.log(`Bot logged in as ${client.user.tag}`);
 });
 
@@ -77,9 +75,8 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-
-
 console.log("TOKEN LENGTH:", process.env.BOT_TOKEN?.length);
+
 client.login(process.env.BOT_TOKEN)
   .then(() => console.log("LOGIN SUCCESS"))
   .catch(err => console.error("LOGIN ERROR:", err));
