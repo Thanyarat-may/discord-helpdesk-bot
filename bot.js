@@ -8,6 +8,20 @@ app.get('/', (req, res) => {
   res.send('IT Helpdesk Bot is running');
 });
 
+let isReady = false;
+
+client.on("clientReady", () => {
+  isReady = true;
+});
+
+app.get("/health", (req, res) => {
+  if (isReady) {
+    res.status(200).send("OK");
+  } else {
+    res.status(500).send("Bot not ready");
+  }
+});
+
 app.listen(process.env.PORT || 3000, () => {
   console.log('Web server ready');
 });
@@ -63,19 +77,7 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-let isReady = false;
 
-client.on("clientReady", () => {
-  isReady = true;
-});
-
-app.get("/health", (req, res) => {
-  if (isReady) {
-    res.status(200).send("OK");
-  } else {
-    res.status(500).send("Bot not ready");
-  }
-});
 
 console.log("TOKEN LENGTH:", process.env.BOT_TOKEN?.length);
 client.login(process.env.BOT_TOKEN)
