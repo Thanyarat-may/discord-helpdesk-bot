@@ -35,13 +35,23 @@ const match = text.match(/^IT\d{2}-\d{3}$/i);
 
 if (match) {
 
-  const res = await axios.post(process.env.GAS_WEBHOOK, {
-    source: "discord",
-    message: text,
-    admin: message.author.username
-  });
+let raw = res.data;
+console.log("RAW RESPONSE:", raw);
 
-  const result = res.data.result;
+let result;
+
+// ถ้า GAS ส่งกลับมาเป็น string
+if (typeof raw === "string") {
+  try {
+    raw = JSON.parse(raw);
+  } catch (e) {
+    console.log("JSON parse error");
+  }
+}
+
+result = raw?.result?.toString().trim().toUpperCase();
+
+console.log("FINAL RESULT:", result);
 
   if (result === "ACCEPTED") {
     await message.reply(`✅ ${text}\nสถานะ: กำลังดำเนินการ`);
